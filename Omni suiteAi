@@ -1,0 +1,715 @@
+Below is the complete index.html (I used the name index.html assuming your “Intex.html” was a small typo). This is a single, production-quality, fully responsive, ultra-modern front-end page for OmniSuite AI — glassmorphic design, gradients, ad placeholders, SEO/OpenGraph meta tags, accessible markup, and JavaScript hooks that call the backend endpoints you specified (/api/detect, /api/humanize, etc.). The page includes placeholder AdSense blocks (replace with your AdSense code), lazy-loading images, form validation, file upload UI, and clean comments so you can plug it into the Node/Express backend later.
+
+Copy this entire content into index.html in your project root (or /public/index.html). If you want, I can next generate the separate CSS/JS files and the full backend — just say “backend code” or “split files”.
+
+
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Basic meta -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OmniSuite AI — Universal AI Tools & File Utilities</title>
+  <meta name="description" content="OmniSuite AI — 50+ AI-powered tools: AI Detector, Humanizer, Grammar Fixer, PDF & Image tools, YouTube tools and more. Fast, secure, global." />
+  <meta name="author" content="OmniSuite AI" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="OmniSuite AI — Universal AI Tools & File Utilities" />
+  <meta property="og:description" content="50+ AI tools and file utilities in one ultra-fast platform. Detect AI text, convert PDFs, generate YouTube titles, and more." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="OmniSuite AI" />
+  <meta property="og:image" content="/assets/og-image.png" />
+  <meta property="og:url" content="https://www.omnisuite.ai" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OmniSuite AI — Universal AI Tools & File Utilities" />
+  <meta name="twitter:description" content="50+ AI tools and file utilities in one ultra-fast platform. Detect AI text, convert PDFs, generate YouTube titles, and more." />
+  <meta name="twitter:image" content="/assets/og-image.png" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Inline critical CSS (keeps single-file easy to test). For production you may separate & minify. -->
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.06);
+      --accent-1: #6EE7F9; /* cyan */
+      --accent-2: #7C3AED; /* purple */
+      --accent-3: #60A5FA; /* blue */
+      --radius: 14px;
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg, #06121A 0%, #071426 50%, #0f1724 100%);
+      color:#0b1220;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding-bottom:48px;
+    }
+
+    /* Page container */
+    .wrap{max-width:1200px;margin:36px auto;padding:24px;}
+
+/* Header */
+header.site-header{
+  display:flex;align-items:center;justify-content:space-between;padding:10px 12px;margin-bottom:18px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;
+}
+.brand .logo{
+  width:48px;height:48px;background:linear-gradient(135deg,var(--accent-2),var(--accent-1));border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#06121A;font-size:18px;box-shadow:0 6px 24px rgba(124,58,237,0.18);
+}
+.brand h1{margin:0;font-size:18px;color:#fff;font-weight:700}
+.nav{display:flex;gap:12px;align-items:center}
+.nav a{color:rgba(255,255,255,0.85);text-decoration:none;font-weight:600;font-size:14px;padding:8px 12px;border-radius:10px}
+.nav a.cta{background:linear-gradient(90deg,var(--accent-2),var(--accent-3));color:#fff;box-shadow:0 8px 30px rgba(96,165,250,0.08)}
+
+/* Hero */
+.hero{
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:20px;
+  align-items:start;
+  margin-bottom:18px;
+}
+.hero-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:var(--radius);
+  padding:26px;
+  border:1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 10px 35px rgba(2,6,23,0.55);
+  color:#fff;
+}
+.hero h2{margin:0 0 8px 0;font-size:28px}
+.hero p.lead{margin:0 0 18px 0;color:rgba(255,255,255,0.8);font-size:15px}
+.input-area{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03);
+  display:flex;flex-direction:column;gap:10px;
+}
+.textarea{
+  min-height:150px;border-radius:10px;padding:14px;background: rgba(10,14,20,0.45);color:#fff;border:none;resize:vertical;font-size:15px;outline:none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+.controls{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.btn{
+  background:linear-gradient(90deg,var(--accent-2),var(--accent-3));
+  color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(124,58,237,0.12)
+}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+.small{font-size:13px;color:rgba(255,255,255,0.75)}
+.icon-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+/* Right side mini dashboard */
+.panel{
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.04);
+  color:#fff;
+}
+.kpi{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.kpi .num{font-weight:800;font-size:20px}
+.kpi .label{font-size:13px;color:rgba(255,255,255,0.75)}
+
+/* Ads placeholders */
+.ad-placeholder{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:8px;border:1px dashed rgba(255,255,255,0.06);padding:12px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
+
+/* Tools grid */
+.tools{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tool-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);color:#fff;display:flex;flex-direction:column;gap:12px;
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.tool-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(2,6,23,0.6)}
+.tool-head{display:flex;align-items:center;gap:12px}
+.tool-icon{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));font-weight:800;color:#06121A}
+.tool-title{font-weight:700}
+.tool-desc{color:rgba(255,255,255,0.75);font-size:13px}
+
+/* Pricing */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.price-card{padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:#fff}
+.price-title{font-weight:800;font-size:18px;margin-bottom:6px}
+.price-cost{font-weight:700;font-size:22px;margin-bottom:10px}
+.features-list{color:rgba(255,255,255,0.75);font-size:14px}
+
+/* Footer */
+.site-footer{margin-top:28px;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));color:rgba(255,255,255,0.8);display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* Responsive */
+@media (max-width:1100px){
+  .hero{grid-template-columns:1fr 340px}
+  .tools{grid-template-columns:repeat(2,1fr)}
+  .pricing{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:780px){
+  .wrap{padding:12px}
+  .hero{grid-template-columns:1fr;gap:14px}
+  .nav{display:none}
+  .tools{grid-template-columns:1fr}
+  .pricing{grid-template-columns:1fr}
+}
+.visually-hidden{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+</style>
+</head>
+<body>
+  <div class="wrap" id="pageRoot">
+
+    <!-- Header -->
+    <header class="site-header" role="banner">
+      <a class="brand" href="/" aria-label="OmniSuite AI home">
+        <div class="logo">OS</div>
+        <div>
+          <h1>OmniSuite AI</h1>
+          <div style="font-size:12px;color:rgba(255,255,255,0.7)">Universal AI tools & file utilities</div>
+        </div>
+      </a>
+
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+        <a href="#tools">Tools</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#docs">API Docs</a>
+        <a class="cta" href="#get-started">Get Started</a>
+      </nav>
+    </header>
+
+    <!-- Top ad placeholder -->
+    <div style="margin-bottom:14px">
+      <div class="ad-placeholder" role="region" aria-label="Top advertisement placeholder">
+        Top Ad — replace with AdSense / ad tag
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-card" role="region">
+        <h2 id="heroTitle">Universal AI Tools for the World</h2>
+        <p class="lead">OmniSuite AI combines best-in-class AI tools and file utilities into a single ultra-fast workspace — detect AI text, humanize content, convert documents, generate creator content, and optimize images in seconds.</p>
+
+        <div class="input-area" role="form" aria-label="Main tool form">
+          <label for="mainText" class="visually-hidden">Text input</label>
+          <textarea id="mainText" class="textarea" placeholder="Paste text here to detect AI-generation, rewrite, or summarize..."></textarea>
+
+          <div class="controls" aria-hidden="false">
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn" id="detectBtn" title="Detect AI">Detect AI</button>
+              <button class="btn ghost" id="humanizeBtn" title="Humanize text">Humanize</button>
+              <button class="btn ghost" id="summarizeBtn" title="Summarize text">Summarize</button>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="small" id="charCount">0 chars</div>
+              <input id="fileUpload" type="file" accept=".txt,.pdf,.docx" style="display:none"/>
+              <label for="fileUpload" class="btn ghost" style="cursor:pointer">Upload file</label>
+            </div>
+          </div>
+
+          <div id="mainResult" style="margin-top:12px;display:none;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);color:#fff">
+            <div id="resultTitle" style="font-weight:700">Result</div>
+            <div id="resultBody" style="margin-top:8px;color:rgba(255,255,255,0.85)"></div>
+          </div>
+        </div>
+
+        <div class="icon-row" aria-hidden="true">
+          <div class="small">Popular: </div>
+          <button class="btn ghost" onclick="openTool('ai-detector')">AI Detector</button>
+          <button class="btn ghost" onclick="openTool('pdf-to-word')">PDF → Word</button>
+          <button class="btn ghost" onclick="openTool('thumbnail')">Thumbnail Ideas</button>
+        </div>
+      </div>
+
+      <!-- Right panel with KPIs and small ad -->
+      <aside class="panel" role="complementary" aria-label="Quick stats & ad">
+        <div class="kpi"><div class="num">50+</div><div class="label">Tools</div></div>
+        <div class="kpi"><div class="num">99.9%</div><div class="label">Uptime</div></div>
+        <div style="margin-top:8px" class="ad-placeholder" role="region" aria-label="Sidebar ad">Sidebar Ad — replace with AdSense</div>
+      </aside>
+    </section>
+
+    <!-- Tools grid -->
+    <section id="tools" aria-labelledby="toolsHeading">
+      <h3 id="toolsHeading" style="color:#fff">All Tools</h3>
+      <p class="small" style="margin-top:6px;color:rgba(255,255,255,0.75)">Choose a tool to open the quick UI or visit the dedicated page for advanced options.</p>
+
+      <div class="tools" role="list">
+        <!-- Each tool card triggers openTool(toolId) -->
+        <article class="tool-card" role="listitem" tabindex="0" aria-labelledby="t1">
+          <div class="tool-head">
+            <div class="tool-icon">AI</div>
+            <div>
+              <div id="t1" class="tool-title">AI Detector</div>
+              <div class="tool-desc">Detect whether text was generated by AI with a clear score and highlights.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('ai-detector')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('ai-detector')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">HU</div>
+            <div>
+              <div class="tool-title">AI Humanizer</div>
+              <div class="tool-desc">Transform robotic text into natural, human-sounding prose while keeping intent intact.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('humanizer')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('humanizer')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">RW</div>
+            <div>
+              <div class="tool-title">Text Rewriter</div>
+              <div class="tool-desc">Rephrase and improve clarity while preserving the original meaning.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('rewriter')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('rewriter')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">GF</div>
+            <div>
+              <div class="tool-title">Grammar Fixer</div>
+              <div class="tool-desc">Fix grammar, punctuation and readability issues fast.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('grammar')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('grammar')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">SM</div>
+            <div>
+              <div class="tool-title">Summarizer</div>
+              <div class="tool-desc">Extract key points and shorten long content into crisp summaries.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('summarize')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('summarize')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">EM</div>
+            <div>
+              <div class="tool-title">Email Writer</div>
+              <div class="tool-desc">Generate professional, persuasive emails with tone options.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('email')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('email')">Share</button>
+          </div>
+        </article>
+
+        <!-- Document / PDF tools -->
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">PDF</div>
+            <div>
+              <div class="tool-title">PDF → Word</div>
+              <div class="tool-desc">Convert PDFs to editable Word docs while preserving layout.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('pdf-to-word')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('pdf-to-word')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">MRG</div>
+            <div>
+              <div class="tool-title">Merge PDF</div>
+              <div class="tool-desc">Merge multiple PDF files into a single document quickly.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('pdf-merge')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('pdf-merge')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">OCR</div>
+            <div>
+              <div class="tool-title">OCR Extractor</div>
+              <div class="tool-desc">Extract text from images and scanned PDFs with intelligent OCR.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('ocr')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('ocr')">Share</button>
+          </div>
+        </article>
+
+        <!-- Creator tools -->
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">YT</div>
+            <div>
+              <div class="tool-title">YouTube Title Generator</div>
+              <div class="tool-desc">Generate high-CTR titles and descriptions optimized for search.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('youtube-title')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('youtube-title')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">TH</div>
+            <div>
+              <div class="tool-title">Thumbnail Ideas</div>
+              <div class="tool-desc">AI suggestions and copy for thumbnails that convert.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('thumbnail')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('thumbnail')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">#</div>
+            <div>
+              <div class="tool-title">Hashtag Generator</div>
+              <div class="tool-desc">Generate trending hashtags tailored to your content and region.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('hashtags')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('hashtags')">Share</button>
+          </div>
+        </article>
+
+        <article class="tool-card" role="listitem" tabindex="0">
+          <div class="tool-head">
+            <div class="tool-icon">HK</div>
+            <div>
+              <div class="tool-title">Hook Writer</div>
+              <div class="tool-desc">Short, punchy hooks for video openings and post intros.</div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;gap:8px;">
+            <button class="btn" onclick="openTool('hook')">Open Tool</button>
+            <button class="btn ghost" onclick="copyLink('hook')">Share</button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- In-article ad placeholder -->
+    <div style="margin-top:18px">
+      <div class="ad-placeholder" role="region" aria-label="In-article advertisement">
+        In-article Ad — replace with AdSense / ad tag
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <section id="pricing" style="margin-top:22px" aria-labelledby="pricingHeading">
+      <h3 id="pricingHeading" style="color:#fff">Pricing</h3>
+      <p class="small" style="color:rgba(255,255,255,0.75)">Start free or upgrade to Pro for high volume, API access and ad-free experience.</p>
+
+      <div class="pricing" role="list">
+        <div class="price-card price-card--free" role="listitem">
+          <div class="price-title">Free</div>
+          <div class="price-cost">Free</div>
+          <div class="features-list">
+            <div>Limited daily usage</div>
+            <div>Ads supported</div>
+            <div>Basic tool access</div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn">Get Started</button>
+          </div>
+        </div>
+
+        <div class="price-card price-card--pro" role="listitem">
+          <div class="price-title">Pro</div>
+          <div class="price-cost">$29 / month</div>
+          <div class="features-list">
+            <div>Higher limits & priority speed</div>
+            <div>Large file uploads</div>
+            <div>Ad-free interface</div>
+            <div>Advanced models for writing</div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn">Upgrade to Pro</button>
+          </div>
+        </div>
+
+        <div class="price-card price-card--api" role="listitem">
+          <div class="price-title">API Plan</div>
+          <div class="price-cost">Contact Sales</div>
+          <div class="features-list">
+            <div>Metered API access</div>
+            <div>Enterprise SLAs</div>
+            <div>Custom integrations</div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn ghost">Contact Sales</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div style="display:flex;gap:18px;align-items:center;">
+        <div style="font-weight:700;color:#fff">OmniSuite AI</div>
+        <div class="small">© <span id="year"></span> OmniSuite AI · Privacy · Terms</div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="small">Follow</div>
+        <a href="#" style="color:rgba(255,255,255,0.8)">Twitter</a>
+        <a href="#" style="color:rgba(255,255,255,0.8)">LinkedIn</a>
+      </div>
+    </footer>
+
+    <!-- Footer ad placeholder -->
+    <div style="margin-top:12px">
+      <div class="ad-placeholder" role="region" aria-label="Footer advertisement">
+        Footer Ad — replace with AdSense / ad tag
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Minimal inline JS (for demo) — replace or move to /public/js/app.js -->
+  <script>
+    // Small helpers and event wiring
+    (function(){
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const textarea = document.getElementById('mainText');
+      const charCount = document.getElementById('charCount');
+      const detectBtn = document.getElementById('detectBtn');
+      const humanizeBtn = document.getElementById('humanizeBtn');
+      const summarizeBtn = document.getElementById('summarizeBtn');
+      const fileInput = document.getElementById('fileUpload');
+      const mainResult = document.getElementById('mainResult');
+      const resultBody = document.getElementById('resultBody');
+      const resultTitle = document.getElementById('resultTitle');
+
+      function safeFetch(url, options){
+        // helper: fetch + timeout + basic error handling
+        const controller = new AbortController();
+        const t = setTimeout(()=> controller.abort(), 120000); // 2 min timeout
+        return fetch(url, Object.assign({}, options, {signal: controller.signal}))
+          .then(r => { clearTimeout(t); if(!r.ok) throw new Error('Server error'); return r.json(); });
+      }
+
+      // Update char count
+      textarea.addEventListener('input', ()=> charCount.textContent = textarea.value.length + ' chars');
+
+      // File upload (basic: only txt auto-read client-side)
+      fileInput.addEventListener('change', async (e)=>{
+        const f = e.target.files[0];
+        if(!f) return;
+        if(f.type === 'text/plain'){
+          const txt = await f.text();
+          textarea.value = txt;
+          charCount.textContent = txt.length + ' chars';
+        } else {
+          alert('For other file types, upload to server via the tool page (server-side parsing).');
+        }
+      });
+
+      // Generic UI result setter
+      function showResult(title, html){
+        resultTitle.textContent = title;
+        resultBody.innerHTML = html;
+        mainResult.style.display = 'block';
+      }
+
+      // Tool open (for now shows examples & links to API pages)
+      window.openTool = function(toolId){
+        // Simple modal-style behavior: call a basic API or show how to use
+        if(toolId === 'ai-detector'){
+          const text = textarea.value.trim();
+          if(!text){ alert('Paste text into the textarea to detect or open the dedicated AI Detector page.'); return; }
+          detectBtn.disabled = true; detectBtn.textContent = 'Detecting...';
+          // call backend
+          safeFetch('/api/detect', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({text})
+          }).then(res=>{
+            // Expected: { label: 'AI'|'HUMAN', score: 0.72, explanation: '...' }
+            const label = res.label || (res.score > 0.5 ? 'AI' : 'HUMAN');
+            showResult(label === 'AI' ? 'Likely AI Generated' : 'Likely Human', `
+              <div>Score: <strong>${Math.round((res.score||0)*100)}%</strong></div>
+              <div style="margin-top:8px;color:rgba(255,255,255,0.82)">${res.explanation || 'Pattern-based detection result.'}</div>
+            `);
+          }).catch(err=>{
+            // Fallback: simulate if server missing
+            const fallbackScore = simulateScore(text);
+            showResult(fallbackScore > 50 ? 'Likely AI Generated' : 'Likely Human', `<div>Score: <strong>${fallbackScore}%</strong></div><div style="margin-top:8px;color:rgba(255,255,255,0.82)">Simulated result (server not available).</div>`);
+          }).finally(()=> { detectBtn.disabled = false; detectBtn.textContent = 'Detect AI' });
+        } else {
+          // For other tools simply open the dedicated path (tool pages to be implemented server-side)
+          window.location.href = '/tools/' + toolId + '.html';
+        }
+      };
+
+      // Copy share link
+      window.copyLink = function(toolId){
+        const link = location.origin + '/tools/' + toolId + '.html';
+        navigator.clipboard?.writeText(link).then(()=> alert('Tool link copied to clipboard')).catch(()=> alert('Copy failed — manually share: ' + link));
+      };
+
+      // Detect button click (same as openTool)
+      detectBtn.addEventListener('click', ()=> openTool('ai-detector'));
+
+      // Humanize button
+      humanizeBtn.addEventListener('click', async ()=>{
+        const text = textarea.value.trim();
+        if(!text){ alert('Paste text into the textarea to humanize'); return; }
+        humanizeBtn.disabled = true; humanizeBtn.textContent = 'Processing...';
+        try{
+          const res = await safeFetch('/api/humanize', {
+            method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text})
+          });
+          showResult('Humanized Text', `<pre style="white-space:pre-wrap;color:rgba(255,255,255,0.9);">${escapeHtml(res.output || res.humanized || '')}</pre>`);
+        }catch(e){
+          // fallback
+          const fallback = naiveHumanize(text);
+          showResult('Humanized Text (simulated)', `<pre style="white-space:pre-wrap;color:rgba(255,255,255,0.9);">${escapeHtml(fallback)}</pre>`);
+        }finally{ humanizeBtn.disabled = false; humanizeBtn.textContent = 'Humanize'; }
+      });
+
+      // Summarize button
+      summarizeBtn.addEventListener('click', async ()=>{
+        const text = textarea.value.trim();
+        if(!text){ alert('Paste text into the textarea to summarize'); return; }
+        summarizeBtn.disabled = true; summarizeBtn.textContent = 'Summarizing...';
+        try{
+          const res = await safeFetch('/api/summary' , {
+            method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text})
+          });
+          showResult('Summary', `<div style="color:rgba(255,255,255,0.9)">${escapeHtml(res.summary||res.output||'')}</div>`);
+        }catch(e){
+          // fallback simple summary
+          const s = naiveSummary(text);
+          showResult('Summary (simulated)', `<div style="color:rgba(255,255,255,0.9)">${escapeHtml(s)}</div>`);
+        }finally{ summarizeBtn.disabled = false; summarizeBtn.textContent = 'Summarize' }
+      });
+
+      // Simple client-side utility functions (fallbacks)
+      function simulateScore(text){
+        // naive heuristic: longer and more repetitive -> higher AI score
+        const len = text.length;
+        const theCount = (text.match(/\bthe\b/gi)||[]).length;
+        let score = Math.min(95, Math.round((theCount / Math.max(1,len)) * 3000 + (len>500?30:10)));
+        if(len < 80) score = Math.max(5, Math.round(Math.random()*20));
+        return score;
+      }
+      function naiveHumanize(text){
+        // Very naive: replace 'utilize'->'use' and similar simple swaps
+        return text
+          .replace(/\butilize\b/gi,'use')
+          .replace(/\butilisation\b/gi,'use')
+          .replace(/\bmoreover\b/gi,'also')
+          .replace(/\bprior to\b/gi,'before')
+          .replace(/\bin order to\b/gi,'to');
+      }
+      function naiveSummary(text){
+        // take first 2 sentences as a quick summary
+        const sentences = text.match(/[^.!?]+[.!?]*/g) || [text];
+        return sentences.slice(0,2).join(' ').trim();
+      }
+      function escapeHtml(s){ return (s||'').replace(/[&<>"'\/]/g, function(ch){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#47;'}[ch]; }); }
+
+      // Basic route detection for progressive enhancement (for demo pages)
+      if(location.hash && location.hash.startsWith('#tool=')){
+        const tool = location.hash.split('=')[1];
+        openTool(tool);
+      }
+
+      // Expose small functions for dev console
+      window.__omnisuite = {simulateScore, naiveSummary, naiveHumanize};
+    })();
+  </script>
+
+  <!-- NOTE: For production, move scripts & styles to separate files and minify. -->
+</body>
+</html>
+
+
+---
+
+What I delivered
+
+A complete, single-file index.html for OmniSuite AI with:
+
+Modern glassmorphic UI + gradients + responsive layout
+
+Hero with textarea + actions
+
+Full tools grid (all tools you listed)
+
+Pricing and footer
+
+AdSense-friendly placeholders (Top, In-article, Sidebar, Footer)
+
+SEO and Open Graph meta tags
+
+JavaScript that integrates with the backend endpoints you requested (/api/detect, /api/humanize, /api/summary, etc.), including safe fallback simulation if server is not yet running
+
+Accessibility considerations and small client-side validation
+
+
+
+Next recommended steps (I can do immediately if you want)
+
+Generate the Node.js + Express backend with all /api/* routes, controllers, validation and placeholder logic (I already referenced the endpoints — I can produce full server code next).
+
+Split CSS/JS into /public/css/styles.css and /public/js/app.js and minify.
+
+Create individual tool pages (e.g., /tools/ai-detector.html) and add server-side file upload & PDF handling code.
+
+Add real AdSense code snippets and analytics (I will show where to paste them).
+
+Provide Dockerfile, package.json and server.js ready-to-run with npm install and npm start.
+
+
+Tell me which of the above you want next — I will produce the exact code files (server, controllers, package.json, .env.example) ready to run.
